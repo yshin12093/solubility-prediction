@@ -1,0 +1,115 @@
+# COMBINED PLAN FOR MOLECULAR SOLUBILITY PREDICTION
+
+## 1. DATA PROCESSING AND FUSION STRATEGY
+
+### SMILES Representation Processing
+* **Tokenization**: Character-level tokenization with special tokens for SMILES syntax elements (e.g., [, ], (, ), =)
+* **Augmentation**: Generate 3 non-canonical SMILES per molecule to improve robustness and generalization
+* **Vocabulary**: Build a vocabulary of ~100-150 tokens covering atoms, bonds, and structural elements
+* **Sequence Length**: Maximum 128 tokens (covers >95% of dataset)
+* **Padding Strategy**: Right-padding with [PAD] tokens
+* **Positional Encoding**: Apply sinusoidal positional encodings to preserve molecular structure information
+
+### Molecular Descriptor Integration
+* **Primary Descriptors**: Extract and normalize (z-score) the following molecular properties:
+  - LogP (highest correlation with solubility)
+  - Molecular weight
+  - Number of hydrogen bond donors/acceptors
+  - Topological polar surface area (TPSA)
+  - Number of aromatic rings
+  - Number of rotatable bonds
+* **Preprocessing**: Apply z-score standardization to all descriptors, capping outliers at 5σ
+* **Missing Values**: Replace rare missing values with median of training set
+
+### Fusion Approach
+* **Token-level Fusion**: Embed molecular descriptors and concatenate with SMILES token embeddings
+* **Special [CLS] Token**: Add a learnable classification token for whole-molecule representation
+* **Molecular descriptor embeddings**: 10 features → 64-dim vector via linear projection
+
+## 2. DATASET PREPARATION
+
+* **Dataset Split**: 70% training (790 compounds), 15% validation (169), 15% test (169)
+* **Imbalance Handling**: Apply stratified sampling based on log solubility quartiles for balanced representation
+* **Oversampling**: Increase poorly represented regions (highly soluble compounds) by 20%
+* **Input Tensor Dimensions**: [batch_size, seq_length, embedding_dim] = [32, 128, 256]
+* **Storage Requirements**: ~100MB for processed dataset (within 5GB constraint)
+
+## 3. MODEL ARCHITECTURE
+
+### Architecture Selection
+* **Base Model**: Encoder-only transformer (BERT-style) based on ChemBERTa architecture
+* **Pre-training Strategy**: Masked language modeling on large chemical corpus (ZINC/PubChem)
+* **Fine-tuning**: Regression head for solubility prediction
+
+### Structural Details
+* **Model Size**:
+  - 6 transformer encoder layers
+  - 8 attention heads per layer
+  - 256 embedding dimension
+  - 1024 feed-forward dimension
+  - Total parameters: ~10-20M (appropriate for dataset size)
+
+### Input/Output Handling
+* **Input**:
+  - Tokenized SMILES sequences (padded to max length of 128)
+  - Embedded molecular descriptors (7-10 features)
+* **Output**:
+  - Regression value for log solubility prediction
+  - Optional uncertainty estimate through ensemble or Monte Carlo dropout
+
+## 4. HYPERPARAMETER & TRAINING OPTIMIZATION
+
+### Key Hyperparameters
+* **Learning Rate**: 2e-5 to 5e-5 with linear warmup (10% of steps) and decay
+* **Batch Size**: 32 (optimized for 16GB RAM)
+* **Weight Decay**: 0.01 for regularization
+* **Dropout Rate**: 0.1 in attention layers, 0.2 in feed-forward layers
+
+### Training Strategy
+* **Optimizer**: AdamW with β1=0.9, β2=0.999
+* **Loss Function**: Mean Squared Error (MSE) for regression task
+* **Training Duration**: 20-30 epochs with early stopping
+* **Validation Strategy**: 5-fold cross-validation with scaffold splitting
+* **Early Stopping**: Patience of 5 epochs monitoring validation RMSE
+* **Learning Rate Scheduling**: Cosine decay with warmup for stable convergence
+
+## 5. EVALUATION PROTOCOL
+
+### Key Performance Metrics
+* **Root Mean Square Error (RMSE)**: Primary metric targeting <1.0 log units
+* **Coefficient of Determination (R²)**: Target >0.7 to ensure strong predictive power
+* **Mean Absolute Error (MAE)**: Target <0.7 log units for clinical relevance
+* **Pearson Correlation**: To assess linear relationship strength
+
+### Evaluation Strategy
+* **5-fold cross-validation** with scaffold splitting (chemical-aware partitioning)
+* **Error distribution analysis** across solubility ranges to identify problematic regions
+* **Learning curve analysis** to assess model convergence and potential overfitting
+* **Comparison against baseline** models (Random Forest, GBM, vanilla FFNN)
+
+### Interpretability Assessment
+* **Attention map visualization** to identify influential SMILES substructures
+* **Feature importance ranking** for molecular descriptors
+* **Uncertainty quantification** via ensemble predictions (std deviation)
+* **Y-randomization test** to confirm model learns meaningful patterns
+
+## 6. IMPLEMENTATION FRAMEWORK
+
+### Technical Stack
+* **Framework**: PyTorch with Hugging Face Transformers library
+* **Data Processing**: RDKit for molecular feature extraction
+* **Training Infrastructure**: Single CPU/GPU compatible (16GB RAM constraint)
+
+### Code Structure
+* Modular architecture with separate components for:
+  - Data preprocessing and augmentation
+  - Model definition and training
+  - Evaluation and visualization
+  - Feature extraction and fusion
+
+### Key Dependencies
+* PyTorch (>=1.10)
+* Transformers (>=4.18.0)
+* RDKit (>=2022.03.1)
+* scikit-learn (>=1.0.2)
+* pandas, numpy, matplotlib

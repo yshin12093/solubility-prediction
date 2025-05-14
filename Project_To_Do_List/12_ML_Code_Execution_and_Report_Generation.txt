@@ -1,0 +1,12 @@
+
+12. ML CODE EXECUTION AND REPORT GENERATION
+
+# INSTRUCTIONS: 
+Execute after creating/activating virtual environment and installing dependencies in requirements.txt.
+- ML code is in the "Project_Artifacts/ML_Code" directory
+- Data is in the "Project_Input" directory
+
+# ANTI-HALLUCINATION: 
+If you're unsure about any information, please explicitly state your uncertainty rather than making up.
+
+# DELIVERABLE: ml_execution_report.txt (< 250 words) in the "Project_Memory" directory.

@@ -1,0 +1,22 @@
+# EVALUATION PLAN
+
+## Key Performance Metrics
+- **Root Mean Square Error (RMSE)**: Primary metric targeting <1.0 log units
+- **Coefficient of Determination (R²)**: Target >0.7 to ensure strong predictive power
+- **Mean Absolute Error (MAE)**: Target <0.7 log units for clinical relevance
+- **Pearson Correlation**: To assess linear relationship strength
+
+## Evaluation Strategy
+- **5-fold cross-validation** with scaffold splitting (chemical-aware partitioning)
+- **Error distribution analysis** across solubility ranges to identify problematic regions
+- **Learning curve analysis** to assess model convergence and potential overfitting
+- **Comparison against baseline** models (Random Forest, GBM, vanilla FFNN)
+
+## Interpretability Assessment
+- **Attention map visualization** to identify influential SMILES substructures
+- **Feature importance ranking** for molecular descriptors
+- **Uncertainty quantification** via ensemble predictions (std deviation)
+
+## External Validation
+- **MoleculeNet benchmark** comparison where applicable
+- **Y-randomization test** to confirm model learns meaningful patterns

@@ -1,0 +1,14 @@
+9. EVALUATION PLAN
+
+# INSTRUCTIONS: 
+Develop a focused evaluation strategy for the machine learning model based on the files in the "Project_Memory" folder.
+
+Key Performance Metrics
+   - Define metrics most relevant to the problem 
+   - For classification problems, always include accuracy, precision, recall, F1-score, AUC-ROC, AUC-PR (briefly explain each)
+   - Justify the metric selection
+
+# CONSTRAINT: The evaluation should be feasible on a computer with 16GB of RAM.
+
+# DELIVERABLE:
+evaluation_plan.txt (< 150 words) in the "Project_Memory" folder. Use bullets and short sentences.

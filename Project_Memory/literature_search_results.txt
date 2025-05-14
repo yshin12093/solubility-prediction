@@ -1,0 +1,30 @@
+# LITERATURE SEARCH RESULTS
+
+## DATA PREPROCESSING
+* SMILES tokenization approaches: character-level, substructure-based, and chemical 
+vocabulary-based tokenization all show merit
+* Augmentation using non-canonical SMILES improves model robustness and generalization
+* Feature engineering: combining SMILES with calculated molecular descriptors (LogP, TPSA) 
+enhances prediction
+* Normalizing solubility values and molecular features improves convergence
+* Outlier handling typically preserves extreme values as they represent valid chemical space
+
+## MODEL SELECTION
+* Encoder-only architectures (BERT/RoBERTa variants) dominate for property prediction tasks
+* Pre-training on large molecular databases (ZINC, PubChem) boosts performance significantly
+* Model size: 100M-300M parameters sufficient for most solubility prediction tasks
+* ChemBERTa, MolBERT, and ChemFormer represent state-of-the-art architectures
+* Multi-modal approaches combining SMILES with graph/3D representations show promise
+
+## EVALUATION METHODOLOGIES
+* RMSE and R² remain standard metrics; MAE increasingly adopted for clinical relevance
+* Scaffold splitting preferred over random splits for realistic evaluation
+* Consensus favors multiple evaluation metrics rather than single performance measures
+* Explainability achieved through attention map visualization and attribution methods
+* Model uncertainty quantification becoming essential for real-world applications
+
+## REFERENCES
+* Transformers for molecular property prediction: [arXiv:2404.03969](https://arxiv.org/abs/2404.03969)
+* ChemBERTa: [github.com/seyonec/ChemBERTa](https://github.com/seyonec/ChemBERTa)
+* ABIET (explainable transformers): [10.1016/j.compbiomed.2024.108112](https://doi.org/10.1016/j.compbiomed.2024.108112)
+* MoleculeNet benchmark: [doi:10.1039/c7sc02664a](https://doi.org/10.1039/c7sc02664a)

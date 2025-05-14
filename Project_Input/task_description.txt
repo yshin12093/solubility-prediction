@@ -1,0 +1,1 @@
+build tranformer model for prediction of solubility of small molecules

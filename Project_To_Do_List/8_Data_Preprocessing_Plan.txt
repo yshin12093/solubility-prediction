@@ -1,0 +1,30 @@
+8. Data Preprocessing Plan
+
+# INSTRUCTIONS: Develop a data preprocessing plan for the transformer model input, based on the files in the "Project_Memory" folder.
+
+1. Feature Engineering for Transformer Input
+   - Describe if any feature engineering is needed for the transformer input
+
+2. Time-series Processing 
+   - Determine sequence length for time-varying features
+   - Specify windowing strategies (if applicable) with clinical justification
+   - Define how to encode temporal gaps and irregular sampling in medical data
+
+3. Missing Value Handling 
+   - Propose techniques for addressing missing values
+   - Specify imputation methods appropriate for time-series data
+
+4. Class Imbalance Approaches 
+   - Detail sampling strategies compatible with transformer inputs
+   - Compare before and after class imbalance handling
+
+5. Transformer-Ready Data 
+   - Define the final tensor structure (be specific values)
+   - Number of training, validation, and test sets (for imbalanced data, define the number of positive and negative samples)
+   - Specify token embedding dimensions, sequence lengths, and batch sizing
+
+# CONSTRAINT: The data should be processed on a computer with 16GB of RAM and available storage of 5 GB.
+
+# DELIVERABLE: 
+data_preprocessing_plan.txt (< 250 words) to be stored in the "Project_Memory" folder.
+Use bullets and short sentences.

@@ -1,0 +1,32 @@
+# Machine Learning Repository Search Results
+
+## Key Repositories Found
+
+### 1. tomas-salgado/molecular-solubility-prediction
+- Transformer-based model for molecular solubility prediction
+- Processes SMILES strings using self-attention mechanisms
+- Focused on drug discovery applications
+
+### 2. MolecularAI/MolBART
+- Pretrained BART transformer model for molecular SMILES
+- Uses de-noising objective and chemical format transformation
+- Shows improved generalization for downstream tasks
+
+### 3. Shivam-Kumar-Tatwa/smiles-to-molecular-solubility-prediction
+- Web app implementation for solubility prediction
+- Uses LogS values from John S. Delaney dataset
+- Includes molecular descriptor visualization
+
+## Key Papers with Code
+
+1. **YZS-model** (PapersWithCode)
+- Combines GCN and Transformers for solubility prediction
+- Addresses limitations of traditional methods
+
+2. **Transformers for molecular property prediction**
+- Investigates pre-training dataset requirements
+- Examines domain adaptation techniques
+
+3. **ChemBERTa**
+- Systematic evaluation of transformers for molecular tasks
+- Competitive performance on MoleculeNet benchmarks

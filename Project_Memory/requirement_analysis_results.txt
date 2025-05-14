@@ -1,0 +1,20 @@
+# REQUIREMENT ANALYSIS RESULTS
+
+## MAIN OBJECTIVE
+Develop a transformer-based machine learning model to predict the solubility of small molecules represented by SMILES strings.
+
+## DATA SOURCES
+- solubility_esol.csv: Contains SMILES representations of molecules and their corresponding solubility values
+
+## EXPECTED DELIVERABLES
+1. A transformer model architecture for molecular solubility prediction
+2. Training and evaluation pipeline for the model
+3. Performance metrics on test data
+4. Code documentation and usage instructions
+
+## KEY CONSTRAINTS/CRITERIA
+- Input data format: SMILES strings for molecular representation
+- Output: Numerical solubility prediction (regression task)
+- Model type: Must use transformer architecture
+- Evaluation metrics should include standard regression metrics (e.g., RMSE, R²)
+- The model should effectively learn from the chemical structure patterns in the SMILES notation

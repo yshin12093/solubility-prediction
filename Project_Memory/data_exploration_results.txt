@@ -1,0 +1,22 @@
+# DATA EXPLORATION RESULTS
+
+## Dataset Overview
+The solubility dataset contains 1,128 compounds with SMILES representations and 
+corresponding solubility values. The solubility values range from approximately 
++1.1 to -8.6 log units, with most compounds being poorly soluble (negative values).
+
+## Key Molecular Features
+Analysis revealed strong correlations between molecular properties and solubility:
+- LogP (octanol-water partition coefficient) showed the strongest negative correlation with solubility
+- Molecular weight and size (NumHeavyAtoms) inversely correlated with solubility
+- Number of aromatic rings also negatively impacted solubility
+- Hydrogen bond donors and acceptors positively influenced solubility
+
+## Distribution Patterns
+The solubility distribution is slightly skewed toward negative values, with most compounds having moderate to poor solubility. Feature distributions show that the dataset covers a wide range of molecular properties, providing good representation for model training.
+
+## Quality Assessment
+No missing values were detected in the core dataset. Some outliers were identified in molecular descriptors, particularly in larger and more complex molecules, but these represent valid chemical structures and were retained for analysis.
+
+## Visual Insights
+Scatter plots confirm Lipinski's rule of five observations—compounds with higher molecular weight, LogP, and aromatic complexity consistently show lower solubility, supporting the domain knowledge expectations.

@@ -1,0 +1,105 @@
+7. Transformer Model Plan
+
+# INSTRUCTIONS: 
+Using the files in the "Project_Memory" folder and building on the completed data understanding phase, 
+develop a strategic specification for transformer-based modeling. Do not generate code or process data at this stage.
+
+1 Data processing and fusion strategy
+Outline your approach for preprocessing and fusing the data types (1–8 below) into a unified transformer input.   
+
+2 Model Architecture
+Specify with the rationale the proposed structure, including input/output handling, number of layers, heads, etc.
+
+3 Hyperparameter & Training Optimization
+Outline your strategy for optimizing key hyperparameters and training the model, including settings 
+such as learning rate, dropout rate, batch size, early stopping criteria, and others.
+
+# TYPES OF MEDICAL DATA & PROCESSING INTO A UNIFIED TRANSFORMER EMBEDDING:
+
+1. Static categorical features (gender, race, ethnicity, insurance type etc.)
+- Map to categorical ID (e.g., gender: 0=male, 1=female)
+- Use an embedding layer to convert each ID to a dense embedding vector (e.g., 128-dimensional)
+- The resulting embedding is treated as a single token in the transformer input sequence
+
+2 Time-varying categorical features (Medication codes over time, ICD codes at each visit, etc.)
+- At each timepoint, map categorical codes to unique IDs (e.g., "ICD_E11.9" → 182)
+- Use an embedding layer to convert each ID to a dense embedding vector (e.g., 128-dimensional)
+- Add temporal (positional) encoding
+- The sequence of code embeddings (with temportal encodings) is treated as tokens in a transformer model
+
+3. Static numeric features (Age, BMI at admission, etc.)
+- Normalize the values (e.g., z-score)
+- Apply a linear projection (dense layer) to map each scalar to a dense vector (e.g., 128-dimensional)
+- The resulting embedding is treated as a single token in the transformer input sequence
+
+4. Time-varying numeric features (Lab values or vital signs over time, etc.)
+- Normalize the values (e.g., z-score) at each timepoint
+- Apply a linear projection (dense layer) to map each scalar to a dense vector (e.g., 128-dimensional)
+- Add temporal (positional) encoding
+- The sequence of numeric embeddings (with temportal encodings) is treated as tokens in a transformer model
+
+5. Static Textual features (e.g., clinical notes, discharge summaries, etc.)
+- Tokenize text using a tokenizer (e.g., WordPiece, BPE)
+- Convert each token to an embedding using a pretrained or learned embedding layer
+- Add positional encoding for word order
+- Treated as a sequence of tokens in a text transformer model
+
+6. Time-varying Textual features (e.g., clinical notes, discharge summaries, etc.)
+- Tokenize text using a tokenizer (e.g., WordPiece, BPE) at each timepoint
+- Convert each token to an embedding using a pretrained or learned embedding layer
+- Add within-note positional encoding (word order) and inter-note temporal encoding (timepoint)
+- Treated as a sequence of document-level embeddings in a time-aware transformer model
+
+7. Static Image features (e.g., single radiology image like chest X-ray at admission)
+- Use a pretrained image feature extractor (e.g., ResNet, VGG, or Vision Transformer)
+- Extract features from the image (e.g., global pooled features or patch embeddings)
+- Use the extracted features as a fixed-size embedding vector or a sequence of visual tokens
+- Treated as input to the transformer directly or after optional linear projection
+
+8. Time-varying Image features (e.g., sequential radiology scans like serial MRIs or CTs)
+- At each timepoint, process each image with a pretrained feature extractor (e.g., ViT or CNN backbone)
+- Extract a feature vector or patch sequence per image
+- Add temporal (positional) encoding to preserve the order of image acquisition
+- The sequence of image embeddings is treated as tokens in a time-aware or multimodal transformer model
+
+9. Genomic data (SNPs, structural variants, gene expression, methylation, etc.)
+- Map variants to categorical IDs (e.g., SNP rs429358-T/T → 182)
+- Normalize continuous values (e.g., expression levels, methylation beta values)
+- Use embedding layers for categorical data and linear projections for numeric data
+- Add positional encoding for sequence-based genomic features
+- The resulting genomic embeddings are treated as tokens in the transformer input sequence
+
+# MULTIMODAL FUSION PIPELINE FOR TRANSFORMER MODELS
+
+Step 1: Encode Each Modality into Token Embeddings
+    Each data type (1–9) is preprocessed independently into embeddings:
+    - Static types → Single token embedding
+    - Time-varying types → Sequence of token embeddings
+    - Text and images → Multiple tokens per sample (text tokens or image patches)
+    - Genomic data → Multiple tokens per sample (variant tokens or gene expression tokens)
+    Positional or temporal encodings are added per type to preserve structure
+
+Step 2: Concatenate All Tokens into a Unified Input Sequence
+    - Token embeddings from all data types and timepoints are concatenated into a single sequence as input to the transformer.
+    - When multiple tokens occur at the same timepoint (e.g., an ICD code, a medication, and a clinical note), 
+      they are placed consecutively in the sequence, with each embedding tagged by a shared temporal encoding to indicate alignment in time.
+    - The resulting token sequence is padded or truncated to a fixed length (e.g., 512 tokens) using a special padding token where necessary.
+
+Step 3: Apply Transformer Architecture
+    - The unified token sequence is passed through a transformer encoder
+    - The encoder consists of multiple layers of self-attention mechanisms, each with multiple attention heads
+    - Each layer includes feed-forward neural networks and residual connections with layer normalization
+    - Positional encodings are added to the input embeddings to preserve temporal relationships
+    - The final output of the transformer encoder is a fixed-size vector representing the entire input sequence
+
+Step 4: Apply Output Layer
+    - The fixed-size vector is passed through a dense layer to generate the final prediction
+    - The output layer includes:
+      - sigmoid activation function for binary classification
+      - softmax activation function for multi-class classification
+      - linear activation function for regression
+    
+
+# CONSTRAINT: The model should run on a computer with 16GB of RAM and a available stroage of 5 GB# INSTRUCTIONS: 
+
+# DELIVERABLE: transformer_model_plan.txt (< 250 words) in the "Project_Memory" folder. Use bullets and short sentences.

@@ -1,0 +1,109 @@
+# TRANSFORMER MODEL PLAN FOR MOLECULAR SOLUBILITY PREDICTION
+
+## 1. DATA PROCESSING AND FUSION STRATEGY
+
+### SMILES Representation Processing
+* **Tokenization**: Implement character-level tokenization with special tokens for 
+SMILES syntax elements (e.g., [, ], (, ), =)
+* **Augmentation**: Generate multiple non-canonical SMILES for each molecule (3-5 variants) 
+to improve robustness
+* **Vocabulary**: Build a vocabulary of approximately 100-150 tokens covering atoms, bonds, 
+and structural elements
+
+### Molecular Descriptor Integration
+* **Primary Descriptors**: Extract and normalize (z-score) the following molecular properties:
+  - LogP (highest correlation with solubility)
+  - Molecular weight
+  - Number of hydrogen bond donors/acceptors
+  - Topological polar surface area (TPSA)
+  - Number of aromatic rings
+  - Number of rotatable bonds
+* **Preprocessing**: Apply min-max scaling to all descriptors to range [0,1]
+* **Outlier Handling**: Preserve outliers as they represent valid chemical space, but cap extreme values at 5σ
+
+### Fusion Approach
+* **Token-level Fusion**: Embed molecular descriptors and concatenate with SMILES token embeddings
+* **Special [CLS] Token**: Add a learnable classification token for whole-molecule representation
+* **Positional Encoding**: Apply sinusoidal positional encodings to preserve SMILES sequence order
+
+## 2. MODEL ARCHITECTURE
+
+### Architecture Selection
+* **Base Model**: Encoder-only transformer (BERT-style) based on ChemBERTa architecture
+* **Pre-training Strategy**: Masked language modeling on large chemical corpus (ZINC/PubChem)
+* **Fine-tuning**: Regression head for solubility prediction
+
+### Structural Details
+* **Model Size**:
+  - 6 transformer encoder layers
+  - 8 attention heads per layer
+  - 256 embedding dimension
+  - 1024 feed-forward dimension
+  - Total parameters: ~10-20M (appropriate for dataset size)
+
+### Input/Output Handling
+* **Input**:
+  - Tokenized SMILES sequences (padded to max length of 128)
+  - Embedded molecular descriptors (7-10 features)
+* **Output**:
+  - Regression value for log solubility prediction
+  - Optional uncertainty estimate through ensemble or Monte Carlo dropout
+
+### Technical Rationale
+* Encoder-only architecture aligns with literature findings for property prediction tasks
+* Moderate model size (6 layers) balances performance and computational efficiency
+* Fusion of SMILES and molecular descriptors leverages complementary information sources
+* Integration of domain knowledge (LogP, hydrogen bonds) into the feature set addresses the specific physicochemical factors governing solubility
+
+## 3. HYPERPARAMETER & TRAINING OPTIMIZATION
+
+### Key Hyperparameters
+* **Learning Rate**: 2e-5 to 5e-5 with linear warmup (10% of steps) and decay
+* **Batch Size**: 32-64 depending on GPU memory constraints
+* **Weight Decay**: 0.01 for regularization
+* **Dropout Rate**: 0.1 in attention layers, 0.2 in feed-forward layers
+* **Sequence Length**: 128 tokens (covering >95% of SMILES in dataset)
+
+### Training Strategy
+* **Optimizer**: AdamW with β1=0.9, β2=0.999
+* **Loss Function**: Mean Squared Error (MSE) for regression task
+* **Training Duration**: 20-30 epochs with early stopping
+* **Validation Strategy**: 5-fold cross-validation with scaffold splitting
+* **Early Stopping**: Patience of 5 epochs monitoring validation RMSE
+
+### Optimization Approach
+* **Grid Search**: Initial coarse grid search for learning rate and batch size
+* **Bayesian Optimization**: Fine-tuning of dropout rates and model dimensions
+* **Learning Rate Scheduling**: Cosine decay with warmup for stable convergence
+
+### Evaluation Protocol
+* **Primary Metrics**: RMSE (target <1.0 log units) and R² (target >0.7)
+* **Secondary Metrics**: MAE (target <0.7 log units) and Pearson correlation
+* **Cross-Validation**: Scaffold splitting to ensure structural diversity between train/test
+* **Interpretability Analysis**: Attention map visualization for mechanistic insights
+
+## 4. IMPLEMENTATION CONSIDERATIONS
+
+### Technical Stack
+* **Framework**: PyTorch with Hugging Face Transformers library
+* **Data Processing**: RDKit for molecular feature extraction
+* **Training Infrastructure**: Single GPU (>=8GB VRAM) or TPU for pre-training
+
+### Code Structure
+* Modular architecture with separate components for:
+  - Data preprocessing and augmentation
+  - Model definition and training
+  - Evaluation and visualization
+  - Feature extraction and fusion
+
+### Key Dependencies
+* PyTorch (>=1.10)
+* Transformers (>=4.18.0)
+* RDKit (>=2022.03.1)
+* scikit-learn (>=1.0.2)
+* pandas, numpy, matplotlib
+
+### Deployment Considerations
+* Export trained model in ONNX format for production deployment
+* Containerize preprocessing pipeline for reproducibility
+* Implement simple API for solubility prediction of new molecules

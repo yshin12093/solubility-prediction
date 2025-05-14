@@ -1,0 +1,26 @@
+# DOMAIN INSIGHTS
+
+## KEY DOMAIN PATTERNS TO ANTICIPATE
+Molecular solubility typically follows Lipinski's rule of five and is strongly influenced 
+by hydrophilic/hydrophobic group distribution, with more complex aromatic ring structures 
+and halogenated compounds generally showing lower solubility values as seen in the dataset.
+
+## PRIORITY FEATURES BASED ON DOMAIN EXPERTISE
+1. Molecular weight and size (larger molecules tend to be less soluble)
+2. Number and types of functional groups (especially H-bond donors/acceptors)
+3. LogP (octanol-water partition coefficient) as derived from SMILES
+4. Topological polar surface area (TPSA)
+5. Aromatic ring count and complexity
+
+## CRITICAL THRESHOLDS/BENCHMARKS
+- RMSE < 1.0 log units for solubility prediction is considered good performance
+- R² > 0.7 indicates strong predictive capability
+- Average absolute error < 0.7 log units for practical application
+- Log solubility values range from approximately +1.1 to -8.6 in the dataset
+
+## SIGNIFICANT EXTERNAL FACTORS
+1. Temperature effects on solubility (not captured in static SMILES)
+2. pH sensitivity of certain functional groups
+3. Solvent interactions beyond water (dataset appears to be aqueous solubility)
+4. Crystal lattice energy for solid compounds
+5. Conformational flexibility of molecules affecting solvation

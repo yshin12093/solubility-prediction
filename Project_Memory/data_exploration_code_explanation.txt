@@ -1,0 +1,19 @@
+# DATA EXPLORATION CODE EXPLANATION
+
+The data exploration codebase consists of five modular Python scripts that work together to analyze the solubility dataset:
+
+1. **config.py**: Contains configuration parameters including file paths, visualization settings, and molecular features to extract. These settings can be easily modified without changing the core code.
+
+2. **data_loader.py**: Provides functions to load the CSV data, create RDKit molecule objects from SMILES strings, and calculate molecular descriptors like molecular weight, LogP, and aromatic ring counts.
+
+3. **data_analyzer.py**: Implements analysis utilities for generating summary statistics, detecting outliers using IQR method, and analyzing feature importance based on correlation with solubility.
+
+4. **data_visualizer.py**: Creates various visualizations including distribution plots, correlation matrices, scatter plots with regression lines, and molecular structure visualizations using RDKit.
+
+5. **report_generator.py**: Builds an HTML report that combines all exploration results into a comprehensive, interactive document with embedded visualizations.
+
+6. **main.py**: Orchestrates the entire exploration workflow by calling functions from the other modules.
+
+The code is designed for a complete analysis of molecular solubility data, focusing on chemical features that influence solubility (molecular weight, LogP, hydrogen bond donors/acceptors, etc.) as identified in the domain insights. The exploration follows a logical flow: data loading → feature extraction → statistical analysis → visualization → report generation.
+
+All scripts maintain separation of concerns and are under 100 lines as required.

@@ -1,0 +1,26 @@
+# ML EXECUTION REPORT
+
+## Dataset Characteristics
+- ESOL solubility dataset with 2,704 compounds
+- Split: 2,364 training, 170 validation, 170 test samples
+- SMILES vocabulary contained 36 unique tokens
+
+## Model Architecture
+- Transformer-based model with 6 layers, 8 attention heads
+- Fusion of SMILES token embeddings with molecular descriptors
+- 5.29M total parameters, executable on standard CPU
+
+## Performance Metrics
+- Test RMSE: 0.778 log units (target <1.0)
+- Test R²: 0.863 (target >0.7)
+- Test MAE: 0.592 log units (target <0.7) 
+- Test Pearson correlation: 0.933
+
+## Training Efficiency
+- 5 epochs completed in 218.5 seconds
+- Early improvement in validation metrics:
+  * Epoch 1: RMSE 1.047 → Epoch 5: RMSE 0.718
+  * Consistent improvement across all metrics
+
+## Conclusion
+The model successfully captured solubility patterns, meeting all target performance benchmarks defined in our domain insights. The fusion approach effectively leveraged both structural information from SMILES and physicochemical properties from molecular descriptors, achieving significant predictive accuracy within memory and computational constraints.

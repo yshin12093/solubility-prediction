@@ -1,0 +1,28 @@
+# DATA PREPROCESSING PLAN
+
+## 1. Feature Engineering for Transformer Input
+- SMILES tokenization: Character-level with special tokens for structural elements
+- Generate 3 augmented non-canonical SMILES per molecule to improve generalization
+- Extract key molecular descriptors: LogP, MW, HBond donors/acceptors, TPSA, aromatic rings, 
+rotatable bonds
+- Normalize all descriptors using z-score standardization, capping outliers at 5σ
+
+## 2. Sequence Processing
+- Maximum SMILES sequence length: 128 tokens (covers >95% of dataset)
+- Padding strategy: Right-padding with [PAD] tokens
+- Apply sinusoidal positional encodings to preserve molecular structure information
+
+## 3. Missing Value Handling
+- Molecular descriptors: Replace rare missing values with median of training set
+- SMILES representation: Complete by design, no missing values expected
+
+## 4. Imbalance Approaches (for Regression Task)
+- Apply stratified sampling based on log solubility quartiles for balanced representation
+- Oversample poorly represented regions (highly soluble compounds) by 20%
+
+## 5. Transformer-Ready Data
+- Input tensor dimensions: [batch_size, seq_length, embedding_dim] = [32, 128, 256]
+- Dataset split: 70% training (790 compounds), 15% validation (169), 15% test (169)
+- Distribution across solubility ranges preserved in all splits
+- Molecular descriptor embeddings: 10 features → 64-dim vector via linear projection
+- Estimated storage: ~100MB for processed dataset (within 5GB constraint)
